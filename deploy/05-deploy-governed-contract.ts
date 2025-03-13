@@ -9,7 +9,7 @@ const deployGovernedContract: DeployFunction = async function (hre: HardhatRunti
   const { deploy, log, get } = deployments
   const { deployer } = await getNamedAccounts()
   log("----------------------------------------------------")
-  log("Deploying Box and waiting for confirmations...")
+  log("Deploying GovernedContract and waiting for confirmations...")
   const governedContract = await deploy("GovernedContract", {
     from: deployer,
     args: [],
@@ -31,4 +31,4 @@ const deployGovernedContract: DeployFunction = async function (hre: HardhatRunti
 }
 
 export default deployGovernedContract
-deployGovernedContract.tags = ["all", "box"]
+deployGovernedContract.tags = ["all", "gov"]

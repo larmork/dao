@@ -4,10 +4,12 @@ pragma solidity ^0.8.22;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-abstract contract GovernedContract is Ownable {
+contract GovernedContract is Ownable {
   uint256 private value;
 
   event ValueChanged(uint256 newValue);
+
+  constructor() Ownable(msg.sender) {}
 
   function store(uint256 newValue) public onlyOwner {
     value = newValue;

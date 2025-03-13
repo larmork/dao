@@ -23,26 +23,24 @@ const deployGovernorContract: DeployFunction = async function (hre: HardhatRunti
   log("Deploying GovernorContract implementation...");
   const governorImplementation = await deploy("GovernorContract", {
     from: deployer,
-    args: [
-      governanceToken.address,
-      timeLock.address,
-      QUORUM_PERCENTAGE,
-      VOTING_PERIOD,
-      VOTING_DELAY,
-  ],
+    args: [],
     log: true,
     waitConfirmations: networkConfig[network.name]?.blockConfirmations || 1,
   });
 
   log("Deploying GovernorContract proxy...");
-  const iface = new ethers.Interface(["function initialize(address,address) external"]);
+  const iface = new ethers.Interface([
+    "function initialize(address,address,uint256,uint256,uint256) external"
+  ]);
   const initializeData = iface.encodeFunctionData("initialize", [
     governanceToken.address,
     timeLock.address,
+    QUORUM_PERCENTAGE,
+    VOTING_PERIOD,
+    VOTING_DELAY,
   ]);
 
   const proxy = await deploy("GovernorContractProxy", {
-    contract: "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol:ERC1967Proxy",
     from: deployer,
     args: [governorImplementation.address, initializeData],
     log: true,
